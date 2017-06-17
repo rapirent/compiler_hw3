@@ -22,11 +22,18 @@ extern char* yytext;
 void yyerror(char *);
 
 void create_symbol();								/*establish the symbol table structure*/
-void insert_symbol(char* id, char* type, double data);	/*Insert an undeclared ID in symbol table*/
+void insert_symbol(char* id, char* type, double data, int is_assign);/*Insert an undeclared ID in symbol table*/
 void symbol_assign(char* id, double data);				/*Assign value to a declared ID in symbol table*/
 int lookup_symbol(char* id);						/*Confirm the ID exists in the symbol table*/
 void dump_symbol();									/*List the ids and values of all data*/
 double lookup_double_sym(char* id);
+
+/*for jasmin*/
+FILE *file;
+int error_count = 0;
+int stack_count = 0;
+////
+
 
 int symnum;											/*The number of the symbol*/
 const int eps = 1e-10;
@@ -38,6 +45,7 @@ struct symbol {
     char name[100];
     double ddata;
     int idata;
+    int stack_num;
     struct symbol *next;
     struct symbol *pre;
 };
@@ -59,9 +67,9 @@ struct symbol *symbol_table = NULL;
 /* Type declaration : */
 %token SEM PRINT WHILE LB RB
 %token ADD SUB MUL DIV
-%token ASSIGN 
-%token <ival> NUMBER 
-%token <dval> FLOATNUM 
+%token ASSIGN
+%token <ival> NUMBER
+%token <dval> FLOATNUM
 %token <sval> ID STRING
 %token <typeval> INT DOUBLE
 /*避免ambigious*/
@@ -71,9 +79,9 @@ struct symbol *symbol_table = NULL;
 
 %nonassoc UMINUS
 
-/*	
-	Use %type to specify the type of token within < > 
-	if the token or name of grammar rule will return value($$) 
+/*
+	Use %type to specify the type of token within < >
+	if the token or name of grammar rule will return value($$)
 
 */
 %type <typeval> type
@@ -98,16 +106,16 @@ stmt: decl SEM
 decl:type ID
     {
         if(!symnum) {
-           printf("Create symbol table\n"); 
+           printf("Create symbol table\n");
         }
-        insert_symbol($2,$1,0);
+        insert_symbol($2,$1,0,0);
     }
     |type ID ASSIGN arith
     {
         if(!symnum) {
             printf("Create Symbol table\n");
         }
-        insert_symbol($2,$1,$4);
+        insert_symbol($2,$1,$4,1);
     }
     ;
 type: INT {strcpy($$,"int");}
@@ -117,27 +125,45 @@ assign: ID ASSIGN arith
     {
         if(!error) {
             symbol_assign($1, $3);
-        } 
+        }
         printf("ASSIGN\n");
     }
     ;
-arith:term 
-    | arith ADD term 
+arith:term
+    | arith ADD term
     {
         $$ = $1 + $3;
         printf("ADD\n");
+        if(stmt_has_float) {
+            fprintf(file, "fadd \n");
+        }
+        else {
+            fprintf(file,"iadd \n");
+        }
     }
     | arith SUB term
     {
         $$ = $1 - $3;
         printf("SUB\n");
+        if(stmt_has_float) {
+            fprintf(file,"fsub \n");
+        }
+        else {
+            fprintf(file,"isub \n");
+        }
     }
     ;
-term: factor 
+term: factor
     | term MUL factor
     {
         $$ = $1 * $3;
         printf("MUL\n");
+        if(stmt_has_float) {
+            fprintf(file,"fmul \n");
+        }
+        else {
+            fprintf(file,"imul \n");
+        }
     }
     | term DIV factor
     {
@@ -147,6 +173,12 @@ term: factor
         }
         else {
             $$ = $1 / $3;
+            if(stmt_has_float) {
+                fprintf(file,"fdiv \n");
+            }
+            else {
+                fprintf(file,"idiv \n");
+            }
         }
         printf("DIV\n");
     }
@@ -155,20 +187,22 @@ factor: group
     {
         $$ = $1;
     }
-    | NUMBER 
+    | NUMBER
     {
         $$ = $1;
+        fprintf(file,"ldc %d \n",$1);
     }
     | FLOATNUM
     {
         $<dval>$ = $1;
         stmt_has_float = 1;
+        fprintf(file,"ldc %lf \n",$1);
     }
     | SUB factor
     {
         $$ = -$2;
     }
-    | ID 
+    | ID
     {
         int check;
         if(!(check = lookup_symbol($1))) {
@@ -176,33 +210,49 @@ factor: group
             strcat(tmp,"can’t find variable ");
             strcat(tmp,$1);
             yyerror(tmp);
+        
         }
         else {
             if(check==1) {
                 $$ = (int)lookup_double_sym($1);
+                fprintf(file,"ldc %d\n",(int)lookup_double_sym($1));
             }
             else if(check==2) {
                 $<dval>$ = lookup_double_sym($1);
+                fprintf(file,"ldc %lf\n",lookup_double_sym($1));
                 stmt_has_float = 1;
             }
         }
-        
-    } 
+
+    }
     ;
 print: PRINT group
     {
-        if(!error) { 
+        if(!error) {
             if(stmt_has_float) {
                 printf("Print : %lf\n",$2);
+                //fprintf(file, "ldc %lf \n",$2);
+                fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+                fprintf(file, "swap\n");
+                fprintf(file, "invokevirtual java/io/PrintStream/println(F)V\n");
             }
             else {
                 printf("Print : %d\n",(int)$2);
+                //fprintf(file, "ldc %d \n",(int)$2);
+                fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+                fprintf(file, "swap\n");
+                fprintf(file, "invokevirtual java/io/PrintStream/println(I)V\n");
+
             }
         }
     }
     | PRINT LB STRING RB
     {
         printf("Print : %s\n",$3);
+        fprintf(file, "ldc %s \n",$3);
+        fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+        fprintf(file, "swap\n");
+        fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
     }
     ;
 group:LB arith RB
@@ -214,20 +264,51 @@ group:LB arith RB
 
 int main(int argc, char** argv)
 {
+    file = fopen("Assignment_3.j","w");
+    fprintf(file,".class public main\n.super java/lang/Object\n");
+    fprintf(file,".method public static main([Ljava/lang/String;)V\n");
+    fprintf(file,".limit stack %d\n.limit locals %d\n\n",10,10);
     yylineno = 1;
     symnum = 0;
     stmt_has_float=0;
     error = 0;
+    error_count = 0;
+//    yyparse();
+
     yyparse();
 
+
+    if(error_count) {
+        fprintf(file, "ldc \"Compile Failure!\" \n");
+        fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+        fprintf(file, "swap\n");
+        fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
+ 
+        fprintf(file, "ldc \"Exist %d errors\" \n",error_count);
+        fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+        fprintf(file, "swap\n");
+        fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
+ 
+    }
+    else {
+        fprintf(file, "ldc \"Compile Success!\"\n");
+        fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+        fprintf(file, "swap\n");
+        fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
+    }
+    
+    fprintf(file,"return\n\n.end method\n");
+    fclose(file);
 //	printf("%d \n\n",yylineno);
-	dump_symbol();
+    dump_symbol();
+    printf("\nGenerated: %s\n","Assignment_3.j");
     return 0;
 }
 
 void yyerror(char *s) {
     error = 1;
     printf("<ERROR> %s (line %d)\n",s,yylineno);
+    error_count++;
 //    printf("%s on %d line %s \n",s , yylineno, yytext);
 }
 
@@ -244,6 +325,7 @@ void create_symbol() {
     new_node->idata = 0;
     new_node->ddata = 0.0;
     new_node->pre = NULL;
+    new_node->stack_num = -1;
     if(symbol_table != NULL) {
         symbol_table -> pre = new_node;
     }
@@ -253,26 +335,33 @@ void create_symbol() {
 }
 
 /*symbol insert function*/
-void insert_symbol(char* id, char* type, double data) {
-	if(lookup_symbol(id)!=0) {
+void insert_symbol(char* id, char* type, double data, int is_assign) {
+    if(lookup_symbol(id)!=0) {
         char tmp[200] = {0};
         strcat(tmp,"re-declaration for variable ");
         strcat(tmp,id);
         yyerror(tmp);
-        return;   
+        return;
     }
     create_symbol();
     if(!strcmp(type,"int")) {
         symbol_table->idata = (int)data;
+        if(is_assign) {
+            fprintf(file,"istore %d\n",stack_count);
+        }
     }
     else if(!strcmp(type,"double")){
         symbol_table->ddata = data;
+        if(is_assign) {
+            fprintf(file,"fstore %d\n",stack_count);
+        }
     }
     else {
         printf("this symbol %s's type can't be distinguished\n",id);
     }
     strcpy(symbol_table->name,id);
     strcpy(symbol_table->sym_type,type);
+    symbol_table->stack_num = stack_count++;
     printf("Insert a symbol: %s\n",id);
     symnum++;
 }
@@ -280,7 +369,7 @@ void insert_symbol(char* id, char* type, double data) {
 
 /*symbol value lookup and check exist function*/
 int lookup_symbol(char* id) {
-	struct symbol *tmp  = symbol_table;
+    struct symbol *tmp  = symbol_table;
     while(tmp!=NULL&&tmp->name!=NULL) {
         if(!strcmp(tmp->name,id)) {
             if(!strcmp(tmp->sym_type,"int")) {
@@ -314,6 +403,8 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->idata = (int)data;
+                fprintf(file, "ldc %d \n",(int)data);
+                fprintf(file, "istore %d \n", tmp->stack_num);
                 return;
             }
             tmp = tmp->next;
@@ -323,10 +414,12 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->ddata = data;
+                fprintf(file, "ldc %lf \n",data);
+                fprintf(file, "fstore %d \n", tmp->stack_num);
                 return;
             }
             tmp = tmp->next;
-        } 
+        }
     }
     else {
         printf("this symbol's type can't be distinguished\n");
@@ -335,7 +428,7 @@ void symbol_assign(char* id, double data) {
 
 /*symbol dump function*/
 void dump_symbol(){
-	printf("Total lines: %d.\n\n",yylineno);
+    printf("Total lines: %d.\n\n",yylineno);
     printf("The symbol table: \n\n");
     struct symbol *tmp = symbol_table;
     if(tmp == NULL) {
@@ -364,7 +457,7 @@ void dump_symbol(){
 
 }
 double lookup_double_sym(char* id) {
-	struct symbol *tmp  = symbol_table;
+    struct symbol *tmp  = symbol_table;
     while(tmp!=NULL&&tmp->name!=NULL) {
         if(!strcmp(tmp->name,id)) {
             if(!strcmp(tmp->sym_type,"int")) {

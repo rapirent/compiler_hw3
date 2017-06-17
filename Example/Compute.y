@@ -78,7 +78,7 @@ int main(int argc, char** argv)
 		     	".end method\n");
 	
 	fclose(file);
-	printf("Generated: %s\n","Computer.j");
+	printf("Generated: %s\n","Assignment_3.j");
 
     	return 0;
 }
