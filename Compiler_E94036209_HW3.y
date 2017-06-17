@@ -187,6 +187,11 @@ factor: group
     {
         $$ = $1;
     }
+    | SUB NUMBER
+    {
+        $$ = -$2;
+        fprintf(file,"ldc %d \n",-$2);
+    }
     | NUMBER
     {
         $$ = $1;
@@ -197,10 +202,6 @@ factor: group
         $<dval>$ = $1;
         stmt_has_float = 1;
         fprintf(file,"ldc %lf \n",$1);
-    }
-    | SUB factor
-    {
-        $$ = -$2;
     }
     | ID
     {
@@ -267,7 +268,7 @@ int main(int argc, char** argv)
     file = fopen("Assignment_3.j","w");
     fprintf(file,".class public main\n.super java/lang/Object\n");
     fprintf(file,".method public static main([Ljava/lang/String;)V\n");
-    fprintf(file,".limit stack %d\n.limit locals %d\n\n",10,10);
+    fprintf(file,".limit stack %d\n.limit locals %d\n\n",20,20);
     yylineno = 1;
     symnum = 0;
     stmt_has_float=0;
@@ -403,7 +404,6 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->idata = (int)data;
-                fprintf(file, "ldc %d \n",(int)data);
                 fprintf(file, "istore %d \n", tmp->stack_num);
                 return;
             }
@@ -414,7 +414,6 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->ddata = data;
-                fprintf(file, "ldc %lf \n",data);
                 fprintf(file, "fstore %d \n", tmp->stack_num);
                 return;
             }

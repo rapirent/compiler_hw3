@@ -470,7 +470,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   47
+#define YYLAST   46
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  26
@@ -530,7 +530,7 @@ static const yytype_uint16 yyrline[] =
 {
        0,    94,    94,    95,   101,   102,   103,   104,   106,   113,
      121,   122,   124,   132,   133,   144,   156,   157,   168,   186,
-     190,   195,   201,   205,   229,   249,   258
+     190,   195,   200,   206,   230,   250,   259
 };
 #endif
 
@@ -558,10 +558,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -8
+#define YYPACT_NINF -10
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-8)))
+  (!!((Yystate) == (-10)))
 
 #define YYTABLE_NINF -1
 
@@ -572,11 +572,11 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -8,     2,    -8,    -3,    29,    29,    -8,    -8,    -7,    -8,
-      -8,    -8,     4,     3,    22,     1,    11,    -8,    24,    -8,
-      17,    -8,    -8,     5,    -8,    29,    -8,    35,    -8,    -8,
-      29,    29,    29,    29,    -8,    27,    -8,    31,    29,    11,
-      11,    -8,    -8,    -8,    31
+     -10,     1,   -10,    -4,    25,    -9,   -10,   -10,    -6,   -10,
+     -10,   -10,    38,    27,    40,     0,    11,   -10,    41,   -10,
+      14,   -10,   -10,     4,   -10,    25,   -10,     5,   -10,   -10,
+      25,    25,    25,    25,   -10,    39,   -10,    17,    25,    11,
+      11,   -10,   -10,   -10,    17
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -584,9 +584,9 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     0,    20,    21,    23,    10,
+       2,     0,     1,     0,     0,     0,    21,    22,    23,    10,
       11,     3,     0,     0,     0,     0,    13,    16,     0,    19,
-       0,    24,    23,     0,    22,     0,     4,     8,     7,     5,
+       0,    24,    23,     0,    20,     0,     4,     8,     7,     5,
        0,     0,     0,     0,     6,     0,    26,    12,     0,    14,
       15,    17,    18,    25,     9
 };
@@ -594,8 +594,8 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -8,    -8,    -8,    -8,    -8,    -8,    -1,    15,    -4,    -8,
-      33
+     -10,   -10,   -10,   -10,   -10,   -10,    -1,     2,     3,   -10,
+      42
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -610,20 +610,20 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      15,    24,     2,    20,    29,    25,     3,    26,     4,    30,
-      31,     5,    36,    30,    31,     6,     7,     8,    27,     9,
-      10,    32,    33,     4,    37,    28,     5,    34,    41,    42,
-       6,     7,    22,    35,    43,     4,    21,    44,     5,    30,
-      31,     0,     6,     7,    22,    39,    40,    38
+      15,     2,    20,    29,    24,     3,    25,     4,    30,    31,
+       5,    36,    30,    31,     6,     7,     8,    38,     9,    10,
+       4,    32,    33,     5,    37,    30,    31,     6,     7,    22,
+      35,     4,    39,    40,     5,    41,    42,    44,     6,     7,
+      22,    26,    27,    28,    34,    21,    43
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-       1,     5,     0,     6,     3,    12,     4,     3,     6,     8,
-       9,     9,     7,     8,     9,    13,    14,    15,    15,    17,
-      18,    10,    11,     6,    25,     3,     9,     3,    32,    33,
-      13,    14,    15,    16,     7,     6,     3,    38,     9,     8,
-       9,    -1,    13,    14,    15,    30,    31,    12
+       1,     0,     6,     3,    13,     4,    12,     6,     8,     9,
+       9,     7,     8,     9,    13,    14,    15,    12,    17,    18,
+       6,    10,    11,     9,    25,     8,     9,    13,    14,    15,
+      16,     6,    30,    31,     9,    32,    33,    38,    13,    14,
+      15,     3,    15,     3,     3,     3,     7
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -632,7 +632,7 @@ static const yytype_uint8 yystos[] =
 {
        0,    27,     0,     4,     6,     9,    13,    14,    15,    17,
       18,    28,    29,    30,    31,    32,    33,    34,    35,    36,
-       6,    36,    15,    32,    34,    12,     3,    15,     3,     3,
+       6,    36,    15,    32,    13,    12,     3,    15,     3,     3,
        8,     9,    10,    11,     3,    16,     7,    32,    12,    33,
       33,    34,    34,     7,    32
 };
@@ -650,7 +650,7 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     2,     2,     2,     2,     2,     4,
        1,     1,     3,     1,     3,     3,     1,     3,     3,     1,
-       1,     1,     2,     1,     2,     4,     3
+       2,     1,     1,     1,     2,     4,     3
 };
 
 
@@ -1457,8 +1457,8 @@ yyreduce:
   case 20:
 #line 191 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
-        (yyval.dval) = (yyvsp[0].ival);
-        fprintf(file,"ldc %d \n",(yyvsp[0].ival));
+        (yyval.dval) = -(yyvsp[0].ival);
+        fprintf(file,"ldc %d \n",-(yyvsp[0].ival));
     }
 #line 1464 "y.tab.c" /* yacc.c:1646  */
     break;
@@ -1466,23 +1466,24 @@ yyreduce:
   case 21:
 #line 196 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
+        (yyval.dval) = (yyvsp[0].ival);
+        fprintf(file,"ldc %d \n",(yyvsp[0].ival));
+    }
+#line 1473 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 22:
+#line 201 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+    {
         (yyval.dval) = (yyvsp[0].dval);
         stmt_has_float = 1;
         fprintf(file,"ldc %lf \n",(yyvsp[0].dval));
     }
-#line 1474 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 22:
-#line 202 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
-    {
-        (yyval.dval) = -(yyvsp[0].dval);
-    }
-#line 1482 "y.tab.c" /* yacc.c:1646  */
+#line 1483 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 206 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 207 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         int check;
         if(!(check = lookup_symbol((yyvsp[0].sval)))) {
@@ -1505,11 +1506,11 @@ yyreduce:
         }
 
     }
-#line 1509 "y.tab.c" /* yacc.c:1646  */
+#line 1510 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 230 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 231 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!error) {
             if(stmt_has_float) {
@@ -1529,11 +1530,11 @@ yyreduce:
             }
         }
     }
-#line 1533 "y.tab.c" /* yacc.c:1646  */
+#line 1534 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 250 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 251 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         printf("Print : %s\n",(yyvsp[-1].sval));
         fprintf(file, "ldc %s \n",(yyvsp[-1].sval));
@@ -1541,19 +1542,19 @@ yyreduce:
         fprintf(file, "swap\n");
         fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
     }
-#line 1545 "y.tab.c" /* yacc.c:1646  */
+#line 1546 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 259 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 260 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-1].dval);
     }
-#line 1553 "y.tab.c" /* yacc.c:1646  */
+#line 1554 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1557 "y.tab.c" /* yacc.c:1646  */
+#line 1558 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1781,7 +1782,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 263 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
+#line 264 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
 
 
 int main(int argc, char** argv)
@@ -1789,7 +1790,7 @@ int main(int argc, char** argv)
     file = fopen("Assignment_3.j","w");
     fprintf(file,".class public main\n.super java/lang/Object\n");
     fprintf(file,".method public static main([Ljava/lang/String;)V\n");
-    fprintf(file,".limit stack %d\n.limit locals %d\n\n",10,10);
+    fprintf(file,".limit stack %d\n.limit locals %d\n\n",20,20);
     yylineno = 1;
     symnum = 0;
     stmt_has_float=0;
@@ -1925,7 +1926,6 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->idata = (int)data;
-                fprintf(file, "ldc %d \n",(int)data);
                 fprintf(file, "istore %d \n", tmp->stack_num);
                 return;
             }
@@ -1936,7 +1936,6 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->ddata = data;
-                fprintf(file, "ldc %lf \n",data);
                 fprintf(file, "fstore %d \n", tmp->stack_num);
                 return;
             }
