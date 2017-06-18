@@ -83,7 +83,7 @@ void yyerror(char *);
 void create_symbol();								/*establish the symbol table structure*/
 void insert_symbol(char* id, char* type, double data, int is_assign);/*Insert an undeclared ID in symbol table*/
 void symbol_assign(char* id, double data);				/*Assign value to a declared ID in symbol table*/
-int lookup_symbol(char* id);						/*Confirm the ID exists in the symbol table*/
+int lookup_symbol(char* id, int* symbol_stack_num);		/*Confirm the ID exists in the symbol table*/
 void dump_symbol();									/*List the ids and values of all data*/
 double lookup_double_sym(char* id);
 
@@ -530,7 +530,7 @@ static const yytype_uint16 yyrline[] =
 {
        0,    94,    94,    95,   101,   102,   103,   104,   106,   113,
      121,   122,   124,   132,   133,   144,   156,   157,   168,   186,
-     190,   195,   200,   206,   230,   250,   259
+     190,   195,   200,   206,   231,   251,   260
 };
 #endif
 
@@ -1486,7 +1486,8 @@ yyreduce:
 #line 207 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         int check;
-        if(!(check = lookup_symbol((yyvsp[0].sval)))) {
+        int symbol_stack_num;
+        if(!(check = lookup_symbol((yyvsp[0].sval),&symbol_stack_num))) {
             char tmp[200]={0};
             strcat(tmp,"can’t find variable ");
             strcat(tmp,(yyvsp[0].sval));
@@ -1496,21 +1497,21 @@ yyreduce:
         else {
             if(check==1) {
                 (yyval.dval) = (int)lookup_double_sym((yyvsp[0].sval));
-                fprintf(file,"ldc %d\n",(int)lookup_double_sym((yyvsp[0].sval)));
+                fprintf(file,"iload %d\n",symbol_stack_num);
             }
             else if(check==2) {
                 (yyval.dval) = lookup_double_sym((yyvsp[0].sval));
-                fprintf(file,"ldc %lf\n",lookup_double_sym((yyvsp[0].sval)));
+                fprintf(file,"fload %d\n",symbol_stack_num);
                 stmt_has_float = 1;
             }
         }
 
     }
-#line 1510 "y.tab.c" /* yacc.c:1646  */
+#line 1511 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 231 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 232 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!error) {
             if(stmt_has_float) {
@@ -1530,11 +1531,11 @@ yyreduce:
             }
         }
     }
-#line 1534 "y.tab.c" /* yacc.c:1646  */
+#line 1535 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 251 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 252 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         printf("Print : %s\n",(yyvsp[-1].sval));
         fprintf(file, "ldc %s \n",(yyvsp[-1].sval));
@@ -1542,19 +1543,19 @@ yyreduce:
         fprintf(file, "swap\n");
         fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
     }
-#line 1546 "y.tab.c" /* yacc.c:1646  */
+#line 1547 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 260 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 261 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-1].dval);
     }
-#line 1554 "y.tab.c" /* yacc.c:1646  */
+#line 1555 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1558 "y.tab.c" /* yacc.c:1646  */
+#line 1559 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1782,7 +1783,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 264 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
+#line 265 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
 
 
 int main(int argc, char** argv)
@@ -1859,7 +1860,8 @@ void create_symbol() {
 
 /*symbol insert function*/
 void insert_symbol(char* id, char* type, double data, int is_assign) {
-    if(lookup_symbol(id)!=0) {
+    int dump;
+    if(lookup_symbol(id,&dump)!=0) {
         char tmp[200] = {0};
         strcat(tmp,"re-declaration for variable ");
         strcat(tmp,id);
@@ -1891,10 +1893,11 @@ void insert_symbol(char* id, char* type, double data, int is_assign) {
 
 
 /*symbol value lookup and check exist function*/
-int lookup_symbol(char* id) {
+int lookup_symbol(char* id, int* symbol_stack_num) {
     struct symbol *tmp  = symbol_table;
     while(tmp!=NULL&&tmp->name!=NULL) {
         if(!strcmp(tmp->name,id)) {
+            *symbol_stack_num = tmp->stack_num;
             if(!strcmp(tmp->sym_type,"int")) {
                 return 1;
             }
@@ -1914,7 +1917,8 @@ int lookup_symbol(char* id) {
 /*symbol value assign function*/
 void symbol_assign(char* id, double data) {
     int check;
-    if(!(check = lookup_symbol(id))) {
+    int dump;
+    if(!(check = lookup_symbol(id,&dump))) {
         char str[200] = {0};
         strcat(str,"can’t find variable ");
         strcat(str,id);
@@ -1964,7 +1968,7 @@ void dump_symbol(){
         if(!strcmp(tmp->sym_type,"int")) {
             printf("%s \t %s \t %d\n",tmp->name,tmp->sym_type,tmp->idata);
         }
-        else if(!strcmp(tmp->sym_type,"double")){
+        else if(!strcmp(tmp->sym_type,"double")) {
             printf("%s \t %s  %lf\n",tmp->name,tmp->sym_type,tmp->ddata);
         }
         else {

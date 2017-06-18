@@ -24,7 +24,7 @@ void yyerror(char *);
 void create_symbol();								/*establish the symbol table structure*/
 void insert_symbol(char* id, char* type, double data, int is_assign);/*Insert an undeclared ID in symbol table*/
 void symbol_assign(char* id, double data);				/*Assign value to a declared ID in symbol table*/
-int lookup_symbol(char* id);						/*Confirm the ID exists in the symbol table*/
+int lookup_symbol(char* id, int* symbol_stack_num);		/*Confirm the ID exists in the symbol table*/
 void dump_symbol();									/*List the ids and values of all data*/
 double lookup_double_sym(char* id);
 
@@ -206,7 +206,8 @@ factor: group
     | ID
     {
         int check;
-        if(!(check = lookup_symbol($1))) {
+        int symbol_stack_num;
+        if(!(check = lookup_symbol($1,&symbol_stack_num))) {
             char tmp[200]={0};
             strcat(tmp,"can’t find variable ");
             strcat(tmp,$1);
@@ -216,11 +217,11 @@ factor: group
         else {
             if(check==1) {
                 $$ = (int)lookup_double_sym($1);
-                fprintf(file,"ldc %d\n",(int)lookup_double_sym($1));
+                fprintf(file,"iload %d\n",symbol_stack_num);
             }
             else if(check==2) {
                 $<dval>$ = lookup_double_sym($1);
-                fprintf(file,"ldc %lf\n",lookup_double_sym($1));
+                fprintf(file,"fload %d\n",symbol_stack_num);
                 stmt_has_float = 1;
             }
         }
@@ -337,7 +338,8 @@ void create_symbol() {
 
 /*symbol insert function*/
 void insert_symbol(char* id, char* type, double data, int is_assign) {
-    if(lookup_symbol(id)!=0) {
+    int dump;
+    if(lookup_symbol(id,&dump)!=0) {
         char tmp[200] = {0};
         strcat(tmp,"re-declaration for variable ");
         strcat(tmp,id);
@@ -369,10 +371,11 @@ void insert_symbol(char* id, char* type, double data, int is_assign) {
 
 
 /*symbol value lookup and check exist function*/
-int lookup_symbol(char* id) {
+int lookup_symbol(char* id, int* symbol_stack_num) {
     struct symbol *tmp  = symbol_table;
     while(tmp!=NULL&&tmp->name!=NULL) {
         if(!strcmp(tmp->name,id)) {
+            *symbol_stack_num = tmp->stack_num;
             if(!strcmp(tmp->sym_type,"int")) {
                 return 1;
             }
@@ -392,7 +395,8 @@ int lookup_symbol(char* id) {
 /*symbol value assign function*/
 void symbol_assign(char* id, double data) {
     int check;
-    if(!(check = lookup_symbol(id))) {
+    int dump;
+    if(!(check = lookup_symbol(id,&dump))) {
         char str[200] = {0};
         strcat(str,"can’t find variable ");
         strcat(str,id);
@@ -442,7 +446,7 @@ void dump_symbol(){
         if(!strcmp(tmp->sym_type,"int")) {
             printf("%s \t %s \t %d\n",tmp->name,tmp->sym_type,tmp->idata);
         }
-        else if(!strcmp(tmp->sym_type,"double")){
+        else if(!strcmp(tmp->sym_type,"double")) {
             printf("%s \t %s  %lf\n",tmp->name,tmp->sym_type,tmp->ddata);
         }
         else {
