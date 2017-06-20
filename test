@@ -1,0 +1,8 @@
+print(30/6.5);
+int a = 5;
+double c = 20.5;
+print(c/a);
+print(20.5/5);
+
+
+

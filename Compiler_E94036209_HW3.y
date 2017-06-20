@@ -135,9 +135,13 @@ arith:term
         $$ = $1 + $3;
         printf("ADD\n");
         if(stmt_has_float) {
+            fprintf(file,"ldc %lf\n",$1);
+            fprintf(file,"ldc %lf\n",$3);
             fprintf(file, "fadd \n");
         }
         else {
+            fprintf(file,"ldc %d\n",(int)$1);
+            fprintf(file,"ldc %d\n",(int)$3);
             fprintf(file,"iadd \n");
         }
     }
@@ -146,9 +150,13 @@ arith:term
         $$ = $1 - $3;
         printf("SUB\n");
         if(stmt_has_float) {
+            fprintf(file,"ldc %lf\n",$1);
+            fprintf(file,"ldc %lf\n",$3);
             fprintf(file,"fsub \n");
         }
         else {
+            fprintf(file,"ldc %d\n",(int)$1);
+            fprintf(file,"ldc %d\n",(int)$3);
             fprintf(file,"isub \n");
         }
     }
@@ -159,9 +167,13 @@ term: factor
         $$ = $1 * $3;
         printf("MUL\n");
         if(stmt_has_float) {
+            fprintf(file,"ldc %lf\n",$1);
+            fprintf(file,"ldc %lf\n",$3);
             fprintf(file,"fmul \n");
         }
         else {
+            fprintf(file,"ldc %d\n",(int)$1);
+            fprintf(file,"ldc %d\n",(int)$3);
             fprintf(file,"imul \n");
         }
     }
@@ -174,9 +186,13 @@ term: factor
         else {
             $$ = $1 / $3;
             if(stmt_has_float) {
+                fprintf(file,"ldc %lf\n",$1);
+                fprintf(file,"ldc %lf\n",$3);
                 fprintf(file,"fdiv \n");
             }
             else {
+                fprintf(file,"ldc %d\n",(int)$1);
+                fprintf(file,"ldc %d\n",(int)$3);
                 fprintf(file,"idiv \n");
             }
         }
@@ -190,18 +206,18 @@ factor: group
     | SUB NUMBER
     {
         $$ = -$2;
-        fprintf(file,"ldc %d \n",-$2);
+        //fprintf(file,"ldc %d \n",-$2);
     }
     | NUMBER
     {
         $$ = $1;
-        fprintf(file,"ldc %d \n",$1);
+        //fprintf(file,"ldc %d \n",$1);
     }
     | FLOATNUM
     {
         $<dval>$ = $1;
         stmt_has_float = 1;
-        fprintf(file,"ldc %lf \n",$1);
+        //fprintf(file,"ldc %lf \n",$1);
     }
     | ID
     {
@@ -233,14 +249,14 @@ print: PRINT group
         if(!error) {
             if(stmt_has_float) {
                 printf("Print : %lf\n",$2);
-                //fprintf(file, "ldc %lf \n",$2);
+                fprintf(file, "ldc %lf \n",$2);
                 fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
                 fprintf(file, "swap\n");
                 fprintf(file, "invokevirtual java/io/PrintStream/println(F)V\n");
             }
             else {
                 printf("Print : %d\n",(int)$2);
-                //fprintf(file, "ldc %d \n",(int)$2);
+                fprintf(file, "ldc %d \n",(int)$2);
                 fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
                 fprintf(file, "swap\n");
                 fprintf(file, "invokevirtual java/io/PrintStream/println(I)V\n");
@@ -350,12 +366,14 @@ void insert_symbol(char* id, char* type, double data, int is_assign) {
     if(!strcmp(type,"int")) {
         symbol_table->idata = (int)data;
         if(is_assign) {
+            fprintf(file,"ldc %d\n",(int)data);
             fprintf(file,"istore %d\n",stack_count);
         }
     }
     else if(!strcmp(type,"double")){
         symbol_table->ddata = data;
         if(is_assign) {
+            fprintf(file,"ldc %lf\n",data);
             fprintf(file,"fstore %d\n",stack_count);
         }
     }
@@ -408,6 +426,7 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->idata = (int)data;
+                fprintf(file, "ldc %d\n",(int)data);
                 fprintf(file, "istore %d \n", tmp->stack_num);
                 return;
             }
@@ -418,6 +437,7 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->ddata = data;
+                fprintf(file,"ldc %lf\n",data);
                 fprintf(file, "fstore %d \n", tmp->stack_num);
                 return;
             }

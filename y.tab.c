@@ -529,8 +529,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    94,    94,    95,   101,   102,   103,   104,   106,   113,
-     121,   122,   124,   132,   133,   144,   156,   157,   168,   186,
-     190,   195,   200,   206,   231,   251,   260
+     121,   122,   124,   132,   133,   148,   164,   165,   180,   202,
+     206,   211,   216,   222,   247,   267,   276
 };
 #endif
 
@@ -1386,47 +1386,59 @@ yyreduce:
         (yyval.dval) = (yyvsp[-2].dval) + (yyvsp[0].dval);
         printf("ADD\n");
         if(stmt_has_float) {
+            fprintf(file,"ldc %lf\n",(yyvsp[-2].dval));
+            fprintf(file,"ldc %lf\n",(yyvsp[0].dval));
             fprintf(file, "fadd \n");
         }
         else {
+            fprintf(file,"ldc %d\n",(int)(yyvsp[-2].dval));
+            fprintf(file,"ldc %d\n",(int)(yyvsp[0].dval));
             fprintf(file,"iadd \n");
         }
     }
-#line 1396 "y.tab.c" /* yacc.c:1646  */
+#line 1400 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 145 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 149 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-2].dval) - (yyvsp[0].dval);
         printf("SUB\n");
         if(stmt_has_float) {
+            fprintf(file,"ldc %lf\n",(yyvsp[-2].dval));
+            fprintf(file,"ldc %lf\n",(yyvsp[0].dval));
             fprintf(file,"fsub \n");
         }
         else {
+            fprintf(file,"ldc %d\n",(int)(yyvsp[-2].dval));
+            fprintf(file,"ldc %d\n",(int)(yyvsp[0].dval));
             fprintf(file,"isub \n");
         }
     }
-#line 1411 "y.tab.c" /* yacc.c:1646  */
+#line 1419 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 158 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 166 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-2].dval) * (yyvsp[0].dval);
         printf("MUL\n");
         if(stmt_has_float) {
+            fprintf(file,"ldc %lf\n",(yyvsp[-2].dval));
+            fprintf(file,"ldc %lf\n",(yyvsp[0].dval));
             fprintf(file,"fmul \n");
         }
         else {
+            fprintf(file,"ldc %d\n",(int)(yyvsp[-2].dval));
+            fprintf(file,"ldc %d\n",(int)(yyvsp[0].dval));
             fprintf(file,"imul \n");
         }
     }
-#line 1426 "y.tab.c" /* yacc.c:1646  */
+#line 1438 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 169 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 181 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if((yyvsp[0].dval) == 0) {
             char tmp[200]="The divisor can’t be 0";
@@ -1435,55 +1447,59 @@ yyreduce:
         else {
             (yyval.dval) = (yyvsp[-2].dval) / (yyvsp[0].dval);
             if(stmt_has_float) {
+                fprintf(file,"ldc %lf\n",(yyvsp[-2].dval));
+                fprintf(file,"ldc %lf\n",(yyvsp[0].dval));
                 fprintf(file,"fdiv \n");
             }
             else {
+                fprintf(file,"ldc %d\n",(int)(yyvsp[-2].dval));
+                fprintf(file,"ldc %d\n",(int)(yyvsp[0].dval));
                 fprintf(file,"idiv \n");
             }
         }
         printf("DIV\n");
     }
-#line 1447 "y.tab.c" /* yacc.c:1646  */
+#line 1463 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 187 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 203 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].dval);
     }
-#line 1455 "y.tab.c" /* yacc.c:1646  */
+#line 1471 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 191 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 207 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = -(yyvsp[0].ival);
-        fprintf(file,"ldc %d \n",-(yyvsp[0].ival));
+        //fprintf(file,"ldc %d \n",-$2);
     }
-#line 1464 "y.tab.c" /* yacc.c:1646  */
+#line 1480 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 196 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 212 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].ival);
-        fprintf(file,"ldc %d \n",(yyvsp[0].ival));
+        //fprintf(file,"ldc %d \n",$1);
     }
-#line 1473 "y.tab.c" /* yacc.c:1646  */
+#line 1489 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 201 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 217 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].dval);
         stmt_has_float = 1;
-        fprintf(file,"ldc %lf \n",(yyvsp[0].dval));
+        //fprintf(file,"ldc %lf \n",$1);
     }
-#line 1483 "y.tab.c" /* yacc.c:1646  */
+#line 1499 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 207 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 223 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         int check;
         int symbol_stack_num;
@@ -1507,23 +1523,23 @@ yyreduce:
         }
 
     }
-#line 1511 "y.tab.c" /* yacc.c:1646  */
+#line 1527 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 232 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 248 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!error) {
             if(stmt_has_float) {
                 printf("Print : %lf\n",(yyvsp[0].dval));
-                //fprintf(file, "ldc %lf \n",$2);
+                fprintf(file, "ldc %lf \n",(yyvsp[0].dval));
                 fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
                 fprintf(file, "swap\n");
                 fprintf(file, "invokevirtual java/io/PrintStream/println(F)V\n");
             }
             else {
                 printf("Print : %d\n",(int)(yyvsp[0].dval));
-                //fprintf(file, "ldc %d \n",(int)$2);
+                fprintf(file, "ldc %d \n",(int)(yyvsp[0].dval));
                 fprintf(file, "getstatic java/lang/System/out Ljava/io/PrintStream;\n");
                 fprintf(file, "swap\n");
                 fprintf(file, "invokevirtual java/io/PrintStream/println(I)V\n");
@@ -1531,11 +1547,11 @@ yyreduce:
             }
         }
     }
-#line 1535 "y.tab.c" /* yacc.c:1646  */
+#line 1551 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 252 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 268 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         printf("Print : %s\n",(yyvsp[-1].sval));
         fprintf(file, "ldc %s \n",(yyvsp[-1].sval));
@@ -1543,19 +1559,19 @@ yyreduce:
         fprintf(file, "swap\n");
         fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
     }
-#line 1547 "y.tab.c" /* yacc.c:1646  */
+#line 1563 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 261 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 277 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-1].dval);
     }
-#line 1555 "y.tab.c" /* yacc.c:1646  */
+#line 1571 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1559 "y.tab.c" /* yacc.c:1646  */
+#line 1575 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1783,7 +1799,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 265 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
+#line 281 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
 
 
 int main(int argc, char** argv)
@@ -1872,12 +1888,14 @@ void insert_symbol(char* id, char* type, double data, int is_assign) {
     if(!strcmp(type,"int")) {
         symbol_table->idata = (int)data;
         if(is_assign) {
+            fprintf(file,"ldc %d\n",(int)data);
             fprintf(file,"istore %d\n",stack_count);
         }
     }
     else if(!strcmp(type,"double")){
         symbol_table->ddata = data;
         if(is_assign) {
+            fprintf(file,"ldc %lf\n",data);
             fprintf(file,"fstore %d\n",stack_count);
         }
     }
@@ -1930,6 +1948,7 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->idata = (int)data;
+                fprintf(file, "ldc %d\n",(int)data);
                 fprintf(file, "istore %d \n", tmp->stack_num);
                 return;
             }
@@ -1940,6 +1959,7 @@ void symbol_assign(char* id, double data) {
         while(tmp!=NULL&&tmp->name!=NULL) {
             if(!strcmp(tmp->name,id)) {
                 tmp->ddata = data;
+                fprintf(file,"ldc %lf\n",data);
                 fprintf(file, "fstore %d \n", tmp->stack_num);
                 return;
             }
