@@ -127,6 +127,9 @@ assign: ID ASSIGN arith
         if(!error) {
             symbol_assign($1, $3);
         }
+        else {
+            symbol_assign($1,0);
+        }
         printf("ASSIGN\n");
     }
     ;
@@ -247,7 +250,7 @@ factor: group
     ;
 print: PRINT group
     {
-        if(!error) {
+//        if(!error) {
             if(stmt_has_float) {
                 printf("Print : %lf\n",$2);
                 fprintf(file, "ldc %lf \n",$2);
@@ -263,7 +266,7 @@ print: PRINT group
                 fprintf(file, "invokevirtual java/io/PrintStream/println(I)V\n");
 
             }
-        }
+//        }
     }
     | PRINT LB STRING RB
     {
