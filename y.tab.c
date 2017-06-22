@@ -530,8 +530,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    95,    95,    96,   102,   103,   104,   105,   107,   114,
-     122,   123,   125,   136,   137,   152,   168,   169,   184,   206,
-     210,   215,   220,   226,   251,   271,   280
+     122,   123,   125,   136,   137,   152,   168,   169,   184,   207,
+     211,   216,   221,   227,   253,   273,   282
 };
 #endif
 
@@ -1446,6 +1446,7 @@ yyreduce:
     {
         if((yyvsp[0].dval) == 0) {
             char tmp[200]="The divisor can’t be 0";
+            (yyval.dval) = 0;
             yyerror(tmp);
         }
         else {
@@ -1463,47 +1464,47 @@ yyreduce:
         }
         printf("DIV\n");
     }
-#line 1467 "y.tab.c" /* yacc.c:1646  */
+#line 1468 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 207 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 208 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].dval);
     }
-#line 1475 "y.tab.c" /* yacc.c:1646  */
+#line 1476 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 211 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 212 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = -(yyvsp[0].ival);
         //fprintf(file,"ldc %d \n",-$2);
     }
-#line 1484 "y.tab.c" /* yacc.c:1646  */
+#line 1485 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 216 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 217 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].ival);
         //fprintf(file,"ldc %d \n",$1);
     }
-#line 1493 "y.tab.c" /* yacc.c:1646  */
+#line 1494 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 221 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 222 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].dval);
         stmt_has_float = 1;
         //fprintf(file,"ldc %lf \n",$1);
     }
-#line 1503 "y.tab.c" /* yacc.c:1646  */
+#line 1504 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 227 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 228 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         int check;
         int symbol_stack_num;
@@ -1511,6 +1512,7 @@ yyreduce:
             char tmp[200]={0};
             strcat(tmp,"can’t find variable ");
             strcat(tmp,(yyvsp[0].sval));
+            (yyval.dval) = 0;
             yyerror(tmp);
         
         }
@@ -1527,11 +1529,11 @@ yyreduce:
         }
 
     }
-#line 1531 "y.tab.c" /* yacc.c:1646  */
+#line 1533 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 252 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 254 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
 //        if(!error) {
             if(stmt_has_float) {
@@ -1551,11 +1553,11 @@ yyreduce:
             }
 //        }
     }
-#line 1555 "y.tab.c" /* yacc.c:1646  */
+#line 1557 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 272 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 274 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         printf("Print : %s\n",(yyvsp[-1].sval));
         fprintf(file, "ldc %s \n",(yyvsp[-1].sval));
@@ -1563,19 +1565,19 @@ yyreduce:
         fprintf(file, "swap\n");
         fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
     }
-#line 1567 "y.tab.c" /* yacc.c:1646  */
+#line 1569 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 281 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 283 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-1].dval);
     }
-#line 1575 "y.tab.c" /* yacc.c:1646  */
+#line 1577 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1579 "y.tab.c" /* yacc.c:1646  */
+#line 1581 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1803,7 +1805,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 285 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
+#line 287 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
 
 
 int main(int argc, char** argv)

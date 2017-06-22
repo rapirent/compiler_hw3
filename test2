@@ -1,2 +1,4 @@
 int a = 100;
-a = 55*(c*a);
+a = K;
+print(43/0);
+print(a);

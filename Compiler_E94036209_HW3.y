@@ -185,6 +185,7 @@ term: factor
     {
         if($3 == 0) {
             char tmp[200]="The divisor can’t be 0";
+            $$ = 0;
             yyerror(tmp);
         }
         else {
@@ -231,6 +232,7 @@ factor: group
             char tmp[200]={0};
             strcat(tmp,"can’t find variable ");
             strcat(tmp,$1);
+            $$ = 0;
             yyerror(tmp);
         
         }
