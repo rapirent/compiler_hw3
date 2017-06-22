@@ -4,6 +4,12 @@
 - author: 丁國騰
 - student number: E94036209
 
+# 實作bonus
+
+- double
+- 一般的負數
+- 強制轉型
+
 # start
 
 

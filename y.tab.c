@@ -75,7 +75,7 @@
 #include <math.h>
 /*Extern variables that communicate with lex*/
 #define KRED  "\x1B[31m"
-#define KWHT  "\x1B[37m"
+#define KWHT  "\x1B[0m"
 extern int yylineno;
 extern int yylex();
 extern char* yytext;
