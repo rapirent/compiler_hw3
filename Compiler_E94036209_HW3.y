@@ -15,7 +15,8 @@
 #include <string.h>
 #include <math.h>
 /*Extern variables that communicate with lex*/
-
+#define KRED  "\x1B[31m"
+#define KWHT  "\x1B[37m"
 extern int yylineno;
 extern int yylex();
 extern char* yytext;
@@ -325,7 +326,8 @@ int main(int argc, char** argv)
 
 void yyerror(char *s) {
     error = 1;
-    printf("<ERROR> %s (line %d)\n",s,yylineno);
+    printf("%s<ERROR>%s ",KRED,KWHT);
+    printf("%s (line %d)\n",s,yylineno);
     error_count++;
 //    printf("%s on %d line %s \n",s , yylineno, yytext);
 }

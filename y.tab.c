@@ -74,7 +74,8 @@
 #include <string.h>
 #include <math.h>
 /*Extern variables that communicate with lex*/
-
+#define KRED  "\x1B[31m"
+#define KWHT  "\x1B[37m"
 extern int yylineno;
 extern int yylex();
 extern char* yytext;
@@ -114,7 +115,7 @@ struct symbol *symbol_table = NULL;
 /* Note that you should define the data structure of the symbol table yourself by any form */
 
 
-#line 118 "y.tab.c" /* yacc.c:339  */
+#line 119 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -204,14 +205,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 61 "Compiler_E94036209_HW3.y" /* yacc.c:355  */
+#line 62 "Compiler_E94036209_HW3.y" /* yacc.c:355  */
 
     int ival;
     double dval;
     char sval[100];
     char typeval[10];
 
-#line 215 "y.tab.c" /* yacc.c:355  */
+#line 216 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -228,7 +229,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 232 "y.tab.c" /* yacc.c:358  */
+#line 233 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -528,9 +529,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    94,    94,    95,   101,   102,   103,   104,   106,   113,
-     121,   122,   124,   132,   133,   148,   164,   165,   180,   202,
-     206,   211,   216,   222,   247,   267,   276
+       0,    95,    95,    96,   102,   103,   104,   105,   107,   114,
+     122,   123,   125,   133,   134,   149,   165,   166,   181,   203,
+     207,   212,   217,   223,   248,   268,   277
 };
 #endif
 
@@ -1327,61 +1328,61 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 95 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 96 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         error = 0;
         stmt_has_float = 0;
      }
-#line 1336 "y.tab.c" /* yacc.c:1646  */
+#line 1337 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 107 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 108 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!symnum) {
            printf("Create symbol table\n");
         }
         insert_symbol((yyvsp[0].sval),(yyvsp[-1].typeval),0,0);
     }
-#line 1347 "y.tab.c" /* yacc.c:1646  */
+#line 1348 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 114 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 115 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!symnum) {
             printf("Create Symbol table\n");
         }
         insert_symbol((yyvsp[-2].sval),(yyvsp[-3].typeval),(yyvsp[0].dval),1);
     }
-#line 1358 "y.tab.c" /* yacc.c:1646  */
+#line 1359 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 121 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 122 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {strcpy((yyval.typeval),"int");}
-#line 1364 "y.tab.c" /* yacc.c:1646  */
+#line 1365 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 122 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 123 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {strcpy((yyval.typeval),"double");}
-#line 1370 "y.tab.c" /* yacc.c:1646  */
+#line 1371 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 125 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 126 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!error) {
             symbol_assign((yyvsp[-2].sval), (yyvsp[0].dval));
         }
         printf("ASSIGN\n");
     }
-#line 1381 "y.tab.c" /* yacc.c:1646  */
+#line 1382 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 134 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 135 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-2].dval) + (yyvsp[0].dval);
         printf("ADD\n");
@@ -1396,11 +1397,11 @@ yyreduce:
             fprintf(file,"iadd \n");
         }
     }
-#line 1400 "y.tab.c" /* yacc.c:1646  */
+#line 1401 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 149 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 150 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-2].dval) - (yyvsp[0].dval);
         printf("SUB\n");
@@ -1415,11 +1416,11 @@ yyreduce:
             fprintf(file,"isub \n");
         }
     }
-#line 1419 "y.tab.c" /* yacc.c:1646  */
+#line 1420 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 166 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 167 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-2].dval) * (yyvsp[0].dval);
         printf("MUL\n");
@@ -1434,11 +1435,11 @@ yyreduce:
             fprintf(file,"imul \n");
         }
     }
-#line 1438 "y.tab.c" /* yacc.c:1646  */
+#line 1439 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 181 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 182 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if((yyvsp[0].dval) == 0) {
             char tmp[200]="The divisor can’t be 0";
@@ -1459,47 +1460,47 @@ yyreduce:
         }
         printf("DIV\n");
     }
-#line 1463 "y.tab.c" /* yacc.c:1646  */
+#line 1464 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 203 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 204 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].dval);
     }
-#line 1471 "y.tab.c" /* yacc.c:1646  */
+#line 1472 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 207 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 208 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = -(yyvsp[0].ival);
         //fprintf(file,"ldc %d \n",-$2);
     }
-#line 1480 "y.tab.c" /* yacc.c:1646  */
+#line 1481 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 212 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 213 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].ival);
         //fprintf(file,"ldc %d \n",$1);
     }
-#line 1489 "y.tab.c" /* yacc.c:1646  */
+#line 1490 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 217 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 218 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[0].dval);
         stmt_has_float = 1;
         //fprintf(file,"ldc %lf \n",$1);
     }
-#line 1499 "y.tab.c" /* yacc.c:1646  */
+#line 1500 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 223 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 224 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         int check;
         int symbol_stack_num;
@@ -1523,11 +1524,11 @@ yyreduce:
         }
 
     }
-#line 1527 "y.tab.c" /* yacc.c:1646  */
+#line 1528 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 248 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 249 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         if(!error) {
             if(stmt_has_float) {
@@ -1547,11 +1548,11 @@ yyreduce:
             }
         }
     }
-#line 1551 "y.tab.c" /* yacc.c:1646  */
+#line 1552 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 268 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 269 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         printf("Print : %s\n",(yyvsp[-1].sval));
         fprintf(file, "ldc %s \n",(yyvsp[-1].sval));
@@ -1559,19 +1560,19 @@ yyreduce:
         fprintf(file, "swap\n");
         fprintf(file, "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n"); 
     }
-#line 1563 "y.tab.c" /* yacc.c:1646  */
+#line 1564 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 277 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
+#line 278 "Compiler_E94036209_HW3.y" /* yacc.c:1646  */
     {
         (yyval.dval) = (yyvsp[-1].dval);
     }
-#line 1571 "y.tab.c" /* yacc.c:1646  */
+#line 1572 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1575 "y.tab.c" /* yacc.c:1646  */
+#line 1576 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1799,7 +1800,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 281 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
+#line 282 "Compiler_E94036209_HW3.y" /* yacc.c:1906  */
 
 
 int main(int argc, char** argv)
@@ -1847,7 +1848,8 @@ int main(int argc, char** argv)
 
 void yyerror(char *s) {
     error = 1;
-    printf("<ERROR> %s (line %d)\n",s,yylineno);
+    printf("%s<ERROR>%s ",KRED,KWHT);
+    printf("%s (line %d)\n",s,yylineno);
     error_count++;
 //    printf("%s on %d line %s \n",s , yylineno, yytext);
 }
