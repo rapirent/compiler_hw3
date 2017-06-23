@@ -3,6 +3,24 @@ int a = 5;
 double c = 20.5;
 print(c/a);
 print(20.5/5);
+print(k + a);
+print(5.5 + 6 + 10);
+print(5.5 + 6 + 10/0);
+print(5.5 + 6 + 10);
+print(5.5 + 6 + 10/0);
+print(5.5 + 6 + 10);
+print(5.5 + 6 + 10/0);
+print(5.5 + 6 + 10);
+print(5.5 + 6 + 10/0);
+print(5.5 + 6 + 10);
+print(5.5 + 6 + 10/0);
+print(5.5 + 6 + 10);
+print(5.5 + 6 + 10/0);
+
+
+
+
+
 
 
 

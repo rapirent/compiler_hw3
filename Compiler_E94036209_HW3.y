@@ -291,7 +291,7 @@ int main(int argc, char** argv)
     file = fopen("Assignment_3.j","w");
     fprintf(file,".class public main\n.super java/lang/Object\n");
     fprintf(file,".method public static main([Ljava/lang/String;)V\n");
-    fprintf(file,".limit stack %d\n.limit locals %d\n\n",20,20);
+    fprintf(file,".limit stack %d\n.limit locals %d\n\n",100,100);
     yylineno = 1;
     symnum = 0;
     stmt_has_float=0;
